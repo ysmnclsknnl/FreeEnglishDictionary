@@ -5,7 +5,7 @@ const BASE_URL = "https://api.dictionaryapi.dev/api/v2/entries/en";
 async function fetchData(url) {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status} ${response.statusText}`);
+    throw new Error("Definition is not found");
   }
   return response.json();
 }
@@ -25,24 +25,24 @@ function createDictionaryPage() {
     updateState({ loading: true, error: null });
     const word = document.querySelector("#word-input").value.trim();
 
-    console.log(`word+${word}`);
-
     try {
-      console.log(BASE_URL + "/" + word);
-      const data = await fetchData(BASE_URL + "/" + word);
-      let partOfSpeechArray = [];
-      for (const meaning of data[0].meanings) {
-        const { partOfSpeech, definitions } = meaning;
-        partOfSpeechArray.push();
-        for (const definition of definitions) {
-          partOfSpeechArray.push({ partOfSpeech, definition });
+      console.log(`${BASE_URL}/${word} `);
+      const results = await fetchData(`${BASE_URL}/${word} `);
+      const arrayOfDefinitions = [];
+      for (const result of results) {
+        for (const meaning of result.meanings) {
+          const { partOfSpeech, definitions } = meaning;
+          for (const obj of definitions) {
+            const { definition } = obj;
+            arrayOfDefinitions.push({ partOfSpeech, definition });
+          }
         }
       }
 
       // Loading was successful, update the state accordingly.
-      console.log(data[0].meanings);
+
       updateState({
-        definitions: partOfSpeechArray,
+        definitions: arrayOfDefinitions,
         loading: false,
       });
     } catch (error) {
