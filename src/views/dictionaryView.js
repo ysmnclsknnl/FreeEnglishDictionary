@@ -16,7 +16,8 @@ function createHomeView(props) {
       <button id="antonyms">Antonyms</button>
       </div >
     </div>
-    <div id="definition-container"></div>`;
+    <div id="display-container"></div>`;
+  const displayContainer = root.querySelector("#displayContainer");
 
   const searchForm = root.querySelector("#searchForm");
   searchForm.addEventListener("submit", props.searchDefinitions);
@@ -28,8 +29,8 @@ function createHomeView(props) {
   synonymsBtn.addEventListener("click", props.listSynonyms);
 
   const update = (state) => {
-    counter.textContent = state.count;
-    antonymsBtn.disabled = state.count <= 0;
+    displayContainer.textContent = state.text;
+    // antonymsBtn.disabled = state.count <= 0;
   };
 
   return { root, update };
