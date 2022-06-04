@@ -7,19 +7,19 @@ function createHomeView(props) {
       </div>
     </header>
     <div class="content-container whiteframe">
-    <form action="" id="searchForm">
-    <input type="text" id="word" name="word">
+    <form action="" id="search-form">
+    <input type="text" id="word-input" name="word">
     <input type="submit" value="Search">
   </form>
-  <div id="button-container"> 
-      <button id="synonyms">Synonyms</button>
-      <button id="antonyms">Antonyms</button>
+  <div class="button-container"> 
+      <button id="synonyms" class="hide">Synonyms</button>
+      <button id="antonyms" class="hide">Antonyms</button>
       </div >
     </div>
-    <div id="display-container"></div>`;
-  const displayContainer = root.querySelector("#displayContainer");
+    <div class="display-container hide"></div>`;
+  const displayContainer = root.querySelector(".display-container");
 
-  const searchForm = root.querySelector("#searchForm");
+  const searchForm = root.querySelector("#search-form");
   searchForm.addEventListener("submit", props.searchDefinitions);
 
   const antonymsBtn = root.querySelector("#antonyms");
@@ -29,8 +29,34 @@ function createHomeView(props) {
   synonymsBtn.addEventListener("click", props.listSynonyms);
 
   const update = (state) => {
-    displayContainer.textContent = state.text;
-    // antonymsBtn.disabled = state.count <= 0;
+    if (state.loading) {
+      antonymsBtn.classList.add("hide");
+      synonymsBtn.classList.add("hide");
+      displayContainer.classList.add("hide");
+
+      return;
+    }
+
+    antonymsBtn.classList.remove("hide");
+    synonymsBtn.classList.remove("hide");
+    displayContainer.classList.remove("hide");
+
+    if (state.error) {
+      displayContainer.textContent = state.error.message;
+      return;
+    }
+    console.log(`state.definitions ${state.definitions}`);
+    if (state.definitions && state.error === null) {
+      const definitions = state.definitions;
+      let input = `<ul> </ul>`;
+
+      console.log(typeof definitions);
+      definitions.forEach((element) => {
+        const { partOfSpeech, definition } = element;
+        input += `<li> <span>${partOfSpeech} </span> ${definition}</li>`;
+      });
+      displayContainer.innerHTML = input;
+    }
   };
 
   return { root, update };
