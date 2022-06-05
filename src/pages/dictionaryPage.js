@@ -18,9 +18,7 @@ function createDictionaryPage() {
     view.update(state);
   };
 
-  const searchDefinitions = async (e) => {
-    e.preventDefault();
-
+  const searchDefinitions = async (selectedSearchType) => {
     // Set the loading state and reset the error state.
     updateState({ loading: true, error: null });
     const word = document.querySelector("#word-input").value.trim();
@@ -28,18 +26,38 @@ function createDictionaryPage() {
     try {
       console.log(`${BASE_URL}/${word} `);
       const results = await fetchData(`${BASE_URL}/${word} `);
-      const arrayOfDefinitions = [];
+      console.log(results);
+      const resultObject = {
+        word: "",
+        audio: null,
+        searchType: selectedSearchType,
+        arrayOfSearchResults: [],
+      };
+
       for (const result of results) {
+        const { searchType, arrayOfSearchResults } = resultObject;
+        console.log(result);
+        resultObject.word = result.word;
         for (const meaning of result.meanings) {
-          const { partOfSpeech, definitions } = meaning;
-          arrayOfDefinitions.push({ partOfSpeech, definitions });
+          const { partOfSpeech } = meaning;
+
+          const searchResults = meaning[searchType];
+
+          console.log("search Results");
+          console.log(searchResults);
+          console.log(searchType);
+          arrayOfSearchResults.push({ partOfSpeech, searchResults });
+        }
+
+        for (const phonetic of result.phonetics) {
+          resultObject.audio = phonetic.audio;
         }
       }
 
       // Loading was successful, update the state accordingly.
 
       updateState({
-        definitions: arrayOfDefinitions,
+        searchResults: resultObject,
         loading: false,
       });
     } catch (error) {
@@ -48,20 +66,16 @@ function createDictionaryPage() {
     }
   };
 
-  const listSynonyms = () => {
-    state = { ...state, count: state.count + 1 };
-    view.update(state);
-  };
-  const listAntonyms = () => {
-    state = { ...state, count: state.count + 1 };
-    view.update(state);
-  };
-  // const onDecrement = () => {
-  //   state = { ...state, count: state.count - 1 };
+  // const listSynonyms = () => {
+  //   state = { ...state, count: state.count + 1 };
+  //   view.update(state);
+  // };
+  // const listAntonyms = () => {
+  //   state = { ...state, count: state.count + 1 };
   //   view.update(state);
   // };
 
-  const viewProps = { searchDefinitions, listSynonyms, listAntonyms };
+  const viewProps = { searchDefinitions };
   const view = createDictionaryView(viewProps);
 
   view.update(state);
