@@ -1,9 +1,9 @@
-import createHomePage from './pages/homePage.js';
+import createDictionaryPage from "./pages/dictionaryPage.js";
 
 function loadApp() {
-  const appRoot = document.getElementById('app-root');
+  const appRoot = document.getElementById("app-root");
 
-  const { root } = createHomePage();
+  const { root } = createDictionaryPage();
   appRoot.appendChild(root);
 }
 
