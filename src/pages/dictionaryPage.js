@@ -18,17 +18,16 @@ function createDictionaryPage() {
     view.update(state);
   };
 
-  const searchDefinitions = async (selectedSearchType) => {
+  const search = async (selectedSearchType) => {
     // Set the loading state and reset the error state.
     updateState({ loading: true, error: null });
     const word = document.querySelector("#word-input").value.trim();
 
     try {
-      console.log(`${BASE_URL}/${word} `);
       const results = await fetchData(`${BASE_URL}/${word} `);
-      console.log(results);
+
       const resultObject = {
-        word: "",
+        word: word,
         audio: null,
         searchType: selectedSearchType,
         arrayOfSearchResults: [],
@@ -36,16 +35,10 @@ function createDictionaryPage() {
 
       for (const result of results) {
         const { searchType, arrayOfSearchResults } = resultObject;
-        console.log(result);
-        resultObject.word = result.word;
+
         for (const meaning of result.meanings) {
           const { partOfSpeech } = meaning;
-
           const searchResults = meaning[searchType];
-
-          console.log("search Results");
-          console.log(searchResults);
-          console.log(searchType);
           arrayOfSearchResults.push({ partOfSpeech, searchResults });
         }
 
@@ -66,16 +59,7 @@ function createDictionaryPage() {
     }
   };
 
-  // const listSynonyms = () => {
-  //   state = { ...state, count: state.count + 1 };
-  //   view.update(state);
-  // };
-  // const listAntonyms = () => {
-  //   state = { ...state, count: state.count + 1 };
-  //   view.update(state);
-  // };
-
-  const viewProps = { searchDefinitions };
+  const viewProps = { search };
   const view = createDictionaryView(viewProps);
 
   view.update(state);
