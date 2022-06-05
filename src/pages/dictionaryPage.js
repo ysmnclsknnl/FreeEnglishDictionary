@@ -32,10 +32,7 @@ function createDictionaryPage() {
       for (const result of results) {
         for (const meaning of result.meanings) {
           const { partOfSpeech, definitions } = meaning;
-          for (const obj of definitions) {
-            const { definition } = obj;
-            arrayOfDefinitions.push({ partOfSpeech, definition });
-          }
+          arrayOfDefinitions.push({ partOfSpeech, definitions });
         }
       }
 
