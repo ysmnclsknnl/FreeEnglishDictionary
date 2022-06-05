@@ -47,13 +47,15 @@ function createHomeView(props) {
     }
     console.log(`state.definitions ${state.definitions}`);
     if (state.definitions && state.error === null) {
-      const definitions = state.definitions;
-      let input = `<ul> </ul>`;
+      const arrayOfDefinitions = state.definitions;
+      let input = "";
 
-      console.log(typeof definitions);
-      definitions.forEach((element) => {
-        const { partOfSpeech, definition } = element;
-        input += `<li> <span>${partOfSpeech} </span> ${definition}</li>`;
+      arrayOfDefinitions.forEach((element) => {
+        const { partOfSpeech, definitions } = element;
+        input += `<h3> <span>${partOfSpeech} </span></h3>`;
+        for (const definition of definitions) {
+          input += `<p> ${definition.definition}</p>`;
+        }
       });
       displayContainer.innerHTML = input;
     }
