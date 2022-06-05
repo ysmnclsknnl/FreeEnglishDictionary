@@ -46,9 +46,8 @@ body {
 .hide {
   display: none;
 }
-li {
-  list-style: none;
-  padding: 1vw;
+.display-container p {
+  padding: 5px 5px 5px 20px;
 }
 .display-container {
   color: black;
@@ -56,10 +55,13 @@ li {
   font-size: 1 rem;
   background-color: white;
 }
+.display-container h3 {
+  padding-left: 12px;
+}
 span {
   font-style: italic;
   color: blue;
-  padding-right: 10px;
+  padding-left: 12px;
 }
 @media (min-width: 960px) {
   body {
