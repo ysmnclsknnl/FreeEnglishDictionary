@@ -28,14 +28,8 @@ function createHomeView(props) {
   const searchForm = root.querySelector("#search-form");
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    props.searchDefinitions(selectedSearchType);
+    props.search(selectedSearchType);
   });
-
-  // const antonymsBtn = root.querySelector("#antonyms");
-  // antonymsBtn.addEventListener("click", props.listAntonyms);
-
-  // const synonymsBtn = root.querySelector("#synonyms");
-  // synonymsBtn.addEventListener("click", props.listSynonyms);
 
   const update = (state) => {
     if (state.loading) {
@@ -78,8 +72,8 @@ function createHomeView(props) {
         } else {
           input += `<h3> <span>${partOfSpeech} </span></h3>`;
           for (const searchResult of searchResults) {
-            const data = searchResult["definition"];
-            input += `<p> ${data}</p>`;
+            const definition = searchResult["definition"];
+            input += `<p> ${definition}</p>`;
           }
         }
       }
