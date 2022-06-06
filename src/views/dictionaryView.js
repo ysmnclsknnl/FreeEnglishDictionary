@@ -58,12 +58,15 @@ function createHomeView(props) {
         displayItems += `<h3> <span>${title} </span></h3>`;
       }
       for (const element of rest.arrayOfSearchResults) {
-        console.log(`element ${element}`);
-
         const { partOfSpeech, searchResults } = element;
-        console.log("search Results");
-        console.log(searchResults);
+
         if (searchType !== "definitions") {
+          if (searchResults.length < 1) {
+            const wordType = searchType === "antonyms" ? "antonym" : "synonym";
+            displayItems += `<p> No ${wordType} is found for this word`;
+            displayContainer.innerHTML = displayItems;
+            return;
+          }
           searchResults.forEach(
             (searchResult) => (displayItems += `<p> ${searchResult}</p>`)
           );
