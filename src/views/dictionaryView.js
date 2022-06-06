@@ -1,5 +1,6 @@
+import findElementsWithIds from "../lib/findElementsWithIds.js";
+
 function createHomeView(props) {
-  let selectedSearchType = "definitions";
   const root = document.createElement("div");
   root.innerHTML = String.raw`
     <header class="header">
@@ -8,37 +9,33 @@ function createHomeView(props) {
       </div>
     </header>
     <div class="content-container whiteframe">
-    <form action="" id="search-form">
-    <select id="search-dropdown-list">
+    <form action="" id="searchForm">
+    <select id="dropdownList">
           <option selected value="definitions">Search Definitions</option>
           <option value="synonyms">Search Synonyms</option>
           <option value="antonyms">Search Antonyms</option>
         </select>
-    <input type="text" id="word-input" name="word">
+    <input type="text" id="searchInput" name="word">
     <input type="submit" value="Search">
   </form>
     </div>
-    <div class="display-container hide"></div>`;
-  const displayContainer = root.querySelector(".display-container");
-  const dropdownList = root.querySelector("#search-dropdown-list");
-  dropdownList.addEventListener("change", (e) => {
-    selectedSearchType = e.target.value;
-  });
+    <div id="displayContainer" class= "hide"></div>`;
 
-  const searchForm = root.querySelector("#search-form");
-  searchForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    props.search(selectedSearchType);
-  });
+  const { displayContainer, searchForm, searchInput, dropdownList } =
+    findElementsWithIds(root);
+
+  searchInput.addEventListener("input", props.onSearchInput);
+
+  dropdownList.addEventListener("change", props.onSelectSearchType);
+
+  searchForm.addEventListener("submit", props.search);
 
   const update = (state) => {
     if (state.loading) {
-      displayContainer.classList.add("hide");
-
+      searchInput.value = "";
+      displayContainer.classList.remove("hide");
       return;
     }
-
-    displayContainer.classList.remove("hide");
 
     if (state.error) {
       displayContainer.textContent = state.error.message;
@@ -47,17 +44,18 @@ function createHomeView(props) {
 
     if (state.searchResults && state.error === null) {
       const { word, audio, searchType, ...rest } = state.searchResults;
-      let input = `<h2>${word}</h2> <br>
+
+      let displayItems = `<h2>${word}</h2> <br>
                    `;
       if (audio) {
-        input += `<audio controls>
+        displayItems += `<audio controls>
                   <source src=${audio} type="audio/mpeg">
                   Your browser does not support the audio tag.
                 </audio>`;
       }
       if (searchType !== "definitions") {
         const title = searchType.toUpperCase();
-        input += `<h3> <span>${title} </span></h3>`;
+        displayItems += `<h3> <span>${title} </span></h3>`;
       }
       for (const element of rest.arrayOfSearchResults) {
         console.log(`element ${element}`);
@@ -67,18 +65,19 @@ function createHomeView(props) {
         console.log(searchResults);
         if (searchType !== "definitions") {
           searchResults.forEach(
-            (searchResult) => (input += `<p> ${searchResult}</p>`)
+            (searchResult) => (displayItems += `<p> ${searchResult}</p>`)
           );
         } else {
-          input += `<h3> <span>${partOfSpeech} </span></h3>`;
+          displayItems += `<h3> <span>${partOfSpeech} </span></h3>`;
+
           for (const searchResult of searchResults) {
             const definition = searchResult["definition"];
-            input += `<p> ${definition}</p>`;
+            displayItems += `<p> ${definition}</p>`;
           }
         }
       }
 
-      displayContainer.innerHTML = input;
+      displayContainer.innerHTML = displayItems;
     }
   };
 
