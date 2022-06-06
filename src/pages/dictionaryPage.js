@@ -11,17 +11,23 @@ async function fetchData(url) {
 }
 
 function createDictionaryPage() {
-  let state = {};
+  let state = { searchInput: "", selectedSearchType: "definitions" };
+
   const updateState = (updates) => {
     state = { ...state, ...updates };
     console.log("state", state);
     view.update(state);
   };
 
-  const search = async (selectedSearchType) => {
+  const onSearchInput = (e) => updateState({ searchInput: e.target.value });
+  const onSelectSearchType = (e) =>
+    updateState({ selectedSearchType: e.target.value });
+
+  const search = async (e) => {
+    e.preventDefault();
+    const word = state.searchInput;
     // Set the loading state and reset the error state.
     updateState({ loading: true, error: null });
-    const word = document.querySelector("#word-input").value.trim();
 
     try {
       const results = await fetchData(`${BASE_URL}/${word} `);
@@ -29,7 +35,7 @@ function createDictionaryPage() {
       const resultObject = {
         word: word,
         audio: null,
-        searchType: selectedSearchType,
+        searchType: state.selectedSearchType,
         arrayOfSearchResults: [],
       };
 
@@ -59,7 +65,7 @@ function createDictionaryPage() {
     }
   };
 
-  const viewProps = { search };
+  const viewProps = { search, onSearchInput, onSelectSearchType };
   const view = createDictionaryView(viewProps);
 
   view.update(state);
