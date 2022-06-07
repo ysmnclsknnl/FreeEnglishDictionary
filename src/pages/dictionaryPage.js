@@ -16,6 +16,7 @@ async function fetchData(url) {
 }
 
 function createDictionaryPage() {
+  //Initialize state object
   let state = {
     searchInput: "",
     selectedSearchType: "definitions",
@@ -41,12 +42,12 @@ function createDictionaryPage() {
     e.preventDefault();
 
     const word = state.searchInput;
+
     // Set the loading state and reset the error state.
     updateState({ loading: true, error: null });
 
     try {
       const results = await fetchData(`${BASE_URL}/${word} `);
-      console.log(results);
 
       const resultObject = {
         word: word,
@@ -56,15 +57,21 @@ function createDictionaryPage() {
         arrayOfSearchResults: [],
       };
 
+      //Result objects sometimes contains more than one result object so for of method is used to iterate through results.
       for (const result of results) {
+        //arrayOfSearchResults store data such as definition, synonym and antonym
         const { searchType, arrayOfSearchResults } = resultObject;
 
         resultObject.phonetic = result.phonetic;
 
+        //Words have more than one meaning so each result has meanings key . This key store objects .
         for (const meaning of result.meanings) {
           const { partOfSpeech } = meaning;
           const searchResults = meaning[searchType];
-          arrayOfSearchResults.push({ partOfSpeech, searchResults });
+
+          if (searchResults.length !== 0) {
+            arrayOfSearchResults.push({ partOfSpeech, searchResults });
+          }
         }
 
         for (const phonetic of result.phonetics) {
