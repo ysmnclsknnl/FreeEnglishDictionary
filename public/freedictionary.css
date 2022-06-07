@@ -68,3 +68,9 @@ span {
     width: 720px;
   }
 }
+.loading {
+  color: purple;
+}
+.error {
+  color: red;
+}
