@@ -4,10 +4,15 @@ const BASE_URL = "https://api.dictionaryapi.dev/api/v2/entries/en";
 
 async function fetchData(url) {
   const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("HTTP Error: Page Is Not Found");
+  if (response.status === 404) {
+    const errorInfo = await response.json();
+    throw new Error(errorInfo.message);
+  } else {
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
+    }
+    return response.json();
   }
-  return response.json();
 }
 
 function createDictionaryPage() {
