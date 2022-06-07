@@ -30,6 +30,8 @@ function createHomeView(props) {
 
   searchForm.addEventListener("submit", props.search);
 
+  // This function  create HTML elements  to display definitions, synonyms
+
   const createInnerHTMLAccordingToSearchTypes = (
     arrayOfSearchResults,
     searchType
@@ -70,7 +72,7 @@ function createHomeView(props) {
     if (state.searchResults) {
       const { word, audio, phonetic, searchType, arrayOfSearchResults } =
         state.searchResults;
-      console.log(arrayOfSearchResults);
+
       let displayItems = `<h2>${word}</h2> `;
       if (phonetic) {
         displayItems += `<span>${phonetic}</span>`;
@@ -82,9 +84,13 @@ function createHomeView(props) {
                   Your browser does not support the audio tag.
                 </audio>`;
       }
+
+      //If Search Type Is Synonym Or Antonym
       if (searchType !== "definitions") {
         const title = searchType.toUpperCase();
         displayItems += `<h3> <span>${title} </span></h3>`;
+
+        //If there is no synonym or antonym then display a message to user and return
         if (arrayOfSearchResults.length === 0) {
           const wordType = searchType === "antonyms" ? "antonym" : "synonym";
           displayItems += `<p> No ${wordType} is found for this word`;
@@ -92,6 +98,8 @@ function createHomeView(props) {
           return;
         }
       }
+
+      //If there is a synonym, antonym or definition then create html to display them
       displayItems += createInnerHTMLAccordingToSearchTypes(
         arrayOfSearchResults,
         searchType
