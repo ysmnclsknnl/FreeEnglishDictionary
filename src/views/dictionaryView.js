@@ -37,25 +37,19 @@ function createHomeView(props) {
     let output = "";
     for (const element of arrayOfSearchResults) {
       const { partOfSpeech, searchResults } = element;
+      console.log(`search type is ${searchType}`);
 
       if (searchType !== "definitions") {
-        if (searchResults.length < 1) {
-          const wordType = searchType === "antonyms" ? "antonym" : "synonym";
-          output += `<p> No ${wordType} is found for this word`;
-          displayContainer.innerHTML = output;
-          return;
-        }
-
         searchResults.forEach(
           (searchResult) => (output += `<p> ${searchResult}</p>`)
         );
-      } else {
-        output += `<h3> <span>${partOfSpeech} </span></h3>`;
+        return output;
+      }
+      output += `<h3> <span>${partOfSpeech} </span></h3>`;
 
-        for (const searchResult of searchResults) {
-          const definition = searchResult["definition"];
-          output += `<p> ${definition}</p>`;
-        }
+      for (const searchResult of searchResults) {
+        const definition = searchResult["definition"];
+        output += `<p> ${definition}</p>`;
       }
     }
     return output;
@@ -91,6 +85,15 @@ function createHomeView(props) {
       if (searchType !== "definitions") {
         const title = searchType.toUpperCase();
         displayItems += `<h3> <span>${title} </span></h3>`;
+        console.log("length of array");
+        console.log(rest);
+        console.log(rest.arrayOfSearchResults);
+        if (rest.arrayOfSearchResults.length === 0) {
+          const wordType = searchType === "antonyms" ? "antonym" : "synonym";
+          displayItems += `<p> No ${wordType} is found for this word`;
+          displayContainer.innerHTML = displayItems;
+          return;
+        }
       }
       displayItems += createInnerHTMLAccordingToSearchTypes(
         rest.arrayOfSearchResults,
