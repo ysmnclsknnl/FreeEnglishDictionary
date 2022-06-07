@@ -30,9 +30,39 @@ function createHomeView(props) {
 
   searchForm.addEventListener("submit", props.search);
 
+  const createInnerHTMLAccordingToSearchTypes = (
+    arrayOfSearchResults,
+    searchType
+  ) => {
+    let output = "";
+    for (const element of arrayOfSearchResults) {
+      const { partOfSpeech, searchResults } = element;
+
+      if (searchType !== "definitions") {
+        if (searchResults.length < 1) {
+          const wordType = searchType === "antonyms" ? "antonym" : "synonym";
+          output += `<p> No ${wordType} is found for this word`;
+          displayContainer.innerHTML = output;
+          return;
+        }
+
+        searchResults.forEach(
+          (searchResult) => (output += `<p> ${searchResult}</p>`)
+        );
+      } else {
+        output += `<h3> <span>${partOfSpeech} </span></h3>`;
+
+        for (const searchResult of searchResults) {
+          const definition = searchResult["definition"];
+          output += `<p> ${definition}</p>`;
+        }
+      }
+    }
+    return output;
+  };
+
   const update = (state) => {
     if (state.loading) {
-      searchInput.value = "";
       displayContainer.classList.remove("hide");
       displayContainer.innerHTML = String.raw`<h3 class="loading">Loading............</h3>`;
       return;
@@ -62,28 +92,10 @@ function createHomeView(props) {
         const title = searchType.toUpperCase();
         displayItems += `<h3> <span>${title} </span></h3>`;
       }
-      for (const element of rest.arrayOfSearchResults) {
-        const { partOfSpeech, searchResults } = element;
-
-        if (searchType !== "definitions") {
-          if (searchResults.length < 1) {
-            const wordType = searchType === "antonyms" ? "antonym" : "synonym";
-            displayItems += `<p> No ${wordType} is found for this word`;
-            displayContainer.innerHTML = displayItems;
-            return;
-          }
-          searchResults.forEach(
-            (searchResult) => (displayItems += `<p> ${searchResult}</p>`)
-          );
-        } else {
-          displayItems += `<h3> <span>${partOfSpeech} </span></h3>`;
-
-          for (const searchResult of searchResults) {
-            const definition = searchResult["definition"];
-            displayItems += `<p> ${definition}</p>`;
-          }
-        }
-      }
+      displayItems += createInnerHTMLAccordingToSearchTypes(
+        rest.arrayOfSearchResults,
+        searchType
+      );
 
       displayContainer.innerHTML = displayItems;
     }
