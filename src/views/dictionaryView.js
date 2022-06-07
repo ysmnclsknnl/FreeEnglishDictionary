@@ -34,19 +34,24 @@ function createHomeView(props) {
     if (state.loading) {
       searchInput.value = "";
       displayContainer.classList.remove("hide");
+      displayContainer.innerHTML = String.raw`<h3 class="loading">Loading............</h3>`;
       return;
     }
 
     if (state.error) {
-      displayContainer.textContent = state.error.message;
+      displayContainer.innerHTML = String.raw`<h3 class="error">${state.error.message}</h3>`;
       return;
     }
 
-    if (state.searchResults && state.error === null) {
-      const { word, audio, searchType, ...rest } = state.searchResults;
+    if (state.searchResults) {
+      const { word, audio, phonetic, searchType, ...rest } =
+        state.searchResults;
 
-      let displayItems = `<h2>${word}</h2> <br>
-                   `;
+      let displayItems = `<h2>${word}</h2> `;
+      if (phonetic) {
+        displayItems += `<span>${phonetic}</span>`;
+      }
+
       if (audio) {
         displayItems += `<audio controls>
                   <source src=${audio} type="audio/mpeg">
