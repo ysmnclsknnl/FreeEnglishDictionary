@@ -68,9 +68,9 @@ function createHomeView(props) {
     }
 
     if (state.searchResults) {
-      const { word, audio, phonetic, searchType, ...rest } =
+      const { word, audio, phonetic, searchType, arrayOfSearchResults } =
         state.searchResults;
-
+      console.log(arrayOfSearchResults);
       let displayItems = `<h2>${word}</h2> `;
       if (phonetic) {
         displayItems += `<span>${phonetic}</span>`;
@@ -85,10 +85,7 @@ function createHomeView(props) {
       if (searchType !== "definitions") {
         const title = searchType.toUpperCase();
         displayItems += `<h3> <span>${title} </span></h3>`;
-        console.log("length of array");
-        console.log(rest);
-        console.log(rest.arrayOfSearchResults);
-        if (rest.arrayOfSearchResults.length === 0) {
+        if (arrayOfSearchResults.length === 0) {
           const wordType = searchType === "antonyms" ? "antonym" : "synonym";
           displayItems += `<p> No ${wordType} is found for this word`;
           displayContainer.innerHTML = displayItems;
@@ -96,7 +93,7 @@ function createHomeView(props) {
         }
       }
       displayItems += createInnerHTMLAccordingToSearchTypes(
-        rest.arrayOfSearchResults,
+        arrayOfSearchResults,
         searchType
       );
 
