@@ -9,8 +9,9 @@ Project link is available at [Free Dictionary App](https://ysmnclsknnl.github.io
 
 The Free App is a dictionary application. Users can search definition, synonym and antonym of a word.
 
-## 3. App Folder Structure
+## 3. Application  Folder Structure
 
+```text
 public
 src
 └── lib
@@ -19,6 +20,7 @@ src
 └── app.js
 └── index.js
 index.html
+```
 
 ## 4. Application
 
@@ -26,13 +28,12 @@ index.html
 
 ## 5. Must Haves
 
--   Data should come from an API
--   A user should be able to search a cocktail name and see related results.
--   A user should be able to click on the image of the cocktail and the page must be renewed.
--   A user should be able to see the details such as ingredients and recipes belonging to the selected cocktail.
--   A user should be able to make a new search.
+-  A user can search a word and see the definitions.
+-  A user can see the pronunciation of the word.
+-  A user can listen the audio of the word.
+-  A user can get an appropriate error message  if something goes wrong.
 
-## 6. Nice-to Have
 
--   The background image changes depending on whether the selected cocktail is alcoholic or not.
-
+## 6. Should Haves
+ - A user can see the synonyms of the word. 
+ -  A user can see the antonyms of the word.
