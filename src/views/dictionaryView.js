@@ -8,7 +8,7 @@ function createHomeView(props) {
         <h3> Free <span class='black-text'> Dictionary </span></h3>
       </div>
     </header>
-    <div class="content-container whiteframe">
+    <div class="content-container redframe">
     <form action="" id="searchForm">
     <select id="dropdownList">
           <option selected value="definitions">Search Definitions</option>
