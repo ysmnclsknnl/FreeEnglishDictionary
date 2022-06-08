@@ -5,7 +5,7 @@ function createHomeView(props) {
   root.innerHTML = String.raw`
     <header class="header">
       <div class="header-content">
-        <h3>Free Dictionary </h3>
+        <h3> Free <span class='black-text'> Dictionary </span></h3>
       </div>
     </header>
     <div class="content-container whiteframe">
@@ -15,11 +15,12 @@ function createHomeView(props) {
           <option value="synonyms">Search Synonyms</option>
           <option value="antonyms">Search Antonyms</option>
         </select>
-    <input type="text" id="searchInput" name="word">
-    <input type="submit" value="Search">
+        <div class="search-box-wrapper">
+    <input type="text" id="searchInput" placeholder='Search......' >
+    <button class='search-btn' 'type="submit"> Search</div>
   </form>
     </div>
-    <div id="displayContainer" class= "hide"></div>`;
+    <div id="displayContainer" class= "display-container  hide"></div>`;
 
   const { displayContainer, searchForm, searchInput, dropdownList } =
     findElementsWithIds(root);
@@ -39,7 +40,6 @@ function createHomeView(props) {
     let output = "";
     for (const element of arrayOfSearchResults) {
       const { partOfSpeech, searchResults } = element;
-      console.log(`search type is ${searchType}`);
 
       if (searchType !== "definitions") {
         searchResults.forEach(
