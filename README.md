@@ -4,6 +4,8 @@
 
 Project link is available at [Free Dictionary App](https://ysmnclsknnl.github.io/FreeEnglishDictionary/)
 
+![Free Dictionary Preview](./Readme_img.png)
+
 
 ## 2. Description
 
